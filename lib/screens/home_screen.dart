@@ -1,32 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 import '../models/app_state.dart';
 import '../widgets/nlu_engine_choice.dart';
 import '../widgets/assistant_mode_choice.dart';
 import '../widgets/record_command_button.dart';
 import '../widgets/listen_wake_word_section.dart';
 import '../widgets/chat_section.dart';
+import '../grpc/generated/voice_agent.pbgrpc.dart';
+import '../grpc/voice_agent_client.dart';
+import '../utils/app_config.dart';
 
 class HomePage extends StatefulWidget {
+  final AppConfig config;
+
+  HomePage({Key? key, required this.config});
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
+  late AppConfig _config; // Store the config as an instance variable
   final ScrollController _scrollController = ScrollController();
   List<ChatMessage> chatMessages = [];
+  StreamSubscription<WakeWordStatus>? _wakeWordStatusSubscription;
+  late VoiceAgentClient voiceAgentClient;
+
+  @override
+  void initState() {
+    super.initState();
+    _config = widget.config; // Initialize _config in the initState
+    addChatMessage(
+        "Assistant in Manual mode. You can send commands directly by pressing the record button.");
+  }
 
   void changeAssistantMode(BuildContext context, AssistantMode newMode) {
     final appState = context.read<AppState>();
     clearChatMessages();
+    appState.streamId = "";
+    appState.isWakeWordDetected = false;
+
     if (newMode == AssistantMode.wakeWord) {
       appState.isWakeWordMode = true;
       addChatMessage(
           'Switched to Wake Word mode. I\'ll listen for the wake word before responding.');
+      toggleWakeWordDetection(context, true);
     } else if (newMode == AssistantMode.manual) {
       appState.isWakeWordMode = false;
       addChatMessage(
           'Switched to Manual mode. You can send commands directly by pressing record button.');
+      toggleWakeWordDetection(context, false);
     }
     print(appState.isWakeWordMode);
     setState(() {}); // Trigger a rebuild
@@ -68,6 +91,128 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       chatMessages.clear();
     });
+  }
+
+  void changeCommandRecordingState(
+      BuildContext context, bool isRecording) async {
+    final appState = context.read<AppState>();
+    if (isRecording) {
+      appState.streamId = await startRecording();
+    } else {
+      await stopRecording(appState.streamId, appState.intentEngine);
+    }
+  }
+
+  // gRPC related methods are as follows
+  // Function to start and stop the wake word detection loop
+  void toggleWakeWordDetection(BuildContext context, bool startDetection) {
+    final appState = context.read<AppState>();
+    if (startDetection) {
+      appState.isWakeWordDetected = false;
+      _startWakeWordDetection(context);
+    } else {
+      _stopWakeWordDetection();
+    }
+  }
+
+  // Function to start listening for wake word status responses
+  void _startWakeWordDetection(BuildContext context) {
+    final appState = context.read<AppState>();
+    voiceAgentClient = VoiceAgentClient(_config.grpcHost, _config.grpcPort);
+    _wakeWordStatusSubscription = voiceAgentClient.detectWakeWord().listen(
+      (response) {
+        if (response.status) {
+          // Wake word detected, you can handle this case here
+          // Set _isDetectingWakeWord to false to stop the loop
+          _stopWakeWordDetection();
+          appState.isWakeWordDetected = true;
+          addChatMessage(
+              'Wake word detected! Now you can send your command by pressing the record button.');
+          setState(() {}); // Trigger a rebuild
+        }
+      },
+      onError: (error) {
+        // Handle any errors that occur during wake word detection
+        print('Error during wake word detection: $error');
+        // Set _isDetectingWakeWord to false to stop the loop
+        _stopWakeWordDetection();
+      },
+      cancelOnError: true,
+    );
+  }
+
+  // Function to stop listening for wake word status responses
+  void _stopWakeWordDetection() {
+    _wakeWordStatusSubscription?.cancel();
+    voiceAgentClient.shutdown();
+  }
+
+  Future<String> startRecording() async {
+    String streamId = "";
+    voiceAgentClient = VoiceAgentClient(_config.grpcHost, _config.grpcPort);
+    try {
+      // Create a RecognizeControl message to start recording
+      final controlMessage = RecognizeControl()
+        ..action = RecordAction.START
+        ..recordMode = RecordMode
+            .MANUAL; // You can change this to your desired record mode
+
+      // Create a Stream with the control message
+      final controlStream = Stream.fromIterable([controlMessage]);
+
+      // Call the gRPC method to start recording
+      final response =
+          await voiceAgentClient.recognizeVoiceCommand(controlStream);
+
+      streamId = response.streamId;
+    } catch (e) {
+      print('Error starting recording: $e');
+      addChatMessage('Recording failed. Please try again.');
+    }
+    return streamId;
+  }
+
+  Future<void> stopRecording(String streamId, String nluModel) async {
+    try {
+      NLUModel model = NLUModel.RASA;
+      if (nluModel == "snips") {
+        model = NLUModel.SNIPS;
+      }
+      // Create a RecognizeControl message to stop recording
+      final controlMessage = RecognizeControl()
+        ..action = RecordAction.STOP
+        ..nluModel = model
+        ..streamId =
+            streamId // Use the same stream ID as when starting recording
+        ..recordMode = RecordMode.MANUAL;
+
+      // Create a Stream with the control message
+      final controlStream = Stream.fromIterable([controlMessage]);
+
+      // Call the gRPC method to stop recording
+      final response =
+          await voiceAgentClient.recognizeVoiceCommand(controlStream);
+
+      // Process and store the result
+      if (response.status == RecognizeStatusType.REC_SUCCESS) {
+        final command = response.command;
+        // final intent = response.intent;
+        // final intentSlots = response.intentSlots;
+        addChatMessage(command, isUserMessage: true);
+      } else if (response.status == RecognizeStatusType.INTENT_NOT_RECOGNIZED) {
+        final command = response.command;
+        addChatMessage(command, isUserMessage: true);
+        addChatMessage(
+            "Unable to undertsand the intent behind your request. Please try again.");
+      } else {
+        addChatMessage(
+            'Failed to process your voice command. Please try again.');
+      }
+    } catch (e) {
+      print('Error stopping recording: $e');
+      addChatMessage('Failed to process your voice command. Please try again.');
+    }
+    await voiceAgentClient.shutdown();
   }
 
   @override
@@ -182,10 +327,24 @@ class _HomePageState extends State<HomePage> {
                   addChatMessage: addChatMessage,
                 ),
                 SizedBox(height: 30),
-                if (!appState.isWakeWordMode)
-                  RecordCommandButton()
+                if (!appState.isWakeWordMode || appState.isWakeWordDetected)
+                  Center(
+                    child: Consumer<AppState>(builder: (context, appState, _) {
+                      return RecordCommandButton(
+                        onRecordingStateChanged: (isRecording) {
+                          changeCommandRecordingState(context, isRecording);
+                        },
+                      );
+                    }),
+                  )
                 else
-                  ListeningForWakeWordSection(),
+                  Center(
+                    child: Consumer<AppState>(
+                      builder: (context, appState, _) {
+                        return ListeningForWakeWordSection();
+                      },
+                    ),
+                  ),
               ],
             ),
           ),

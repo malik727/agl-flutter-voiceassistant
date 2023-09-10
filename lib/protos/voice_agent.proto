@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+
+service VoiceAgentService {
+  rpc CheckServiceStatus(Empty) returns (ServiceStatus);
+  rpc DetectWakeWord(Empty) returns (stream WakeWordStatus);
+  rpc RecognizeVoiceCommand(stream RecognizeControl) returns (RecognizeResult);
+  rpc ExecuteVoiceCommand(ExecuteInput) returns (ExecuteResult);
+}
+
+
+enum RecordAction {
+  START = 0;
+  STOP = 1;
+}
+
+enum NLUModel {
+  SNIPS = 0;
+  RASA = 1;
+}
+
+enum RecordMode {
+  MANUAL = 0;
+  AUTO = 1;
+}
+
+enum RecognizeStatusType {
+  REC_ERROR = 0;
+  REC_SUCCESS = 1;
+  REC_PROCESSING = 2;
+  VOICE_NOT_RECOGNIZED = 3;
+  INTENT_NOT_RECOGNIZED = 4;
+}
+
+enum ExecuteStatusType {
+  EXEC_ERROR = 0;
+  EXEC_SUCCESS = 1;
+  KUKSA_CONN_ERROR = 2;
+  INTENT_NOT_SUPPORTED = 3;
+  INTENT_SLOTS_INCOMPLETE = 4;
+}
+
+
+message Empty {}
+
+message ServiceStatus {
+  string version = 1;
+  bool status = 2;  
+}
+
+message WakeWordStatus {
+  bool status = 1;
+}
+
+message RecognizeControl {
+  RecordAction action = 1;
+  NLUModel nlu_model = 2;
+  RecordMode record_mode = 3;
+  string stream_id = 4;
+}
+
+message IntentSlot {
+  string name = 1;
+  string value = 2;
+}
+
+message RecognizeResult {
+  string command = 1;
+  string intent = 2;
+  repeated IntentSlot intent_slots = 3;
+  string stream_id = 4;
+  RecognizeStatusType status = 5;
+}
+
+message ExecuteInput {
+  string intent = 1;
+  repeated IntentSlot intent_slots = 2;
+}
+
+message ExecuteResult {
+  ExecuteStatusType status = 1;
+}

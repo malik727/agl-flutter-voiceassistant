@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 
 class ListeningForWakeWordSection extends StatefulWidget {
   @override
-  _ListeningForWakeWordSectionState createState() =>
-      _ListeningForWakeWordSectionState();
+  ListeningForWakeWordSectionState createState() =>
+      ListeningForWakeWordSectionState();
 }
 
-class _ListeningForWakeWordSectionState
+class ListeningForWakeWordSectionState
     extends State<ListeningForWakeWordSection>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
   late Animation<Color?> _colorAnimation;
 
   @override
@@ -21,10 +20,6 @@ class _ListeningForWakeWordSectionState
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1500), // Adjust the duration as needed
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
     // Create a color change animation
@@ -50,13 +45,10 @@ class _ListeningForWakeWordSectionState
         AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
-            return ScaleTransition(
-              scale: _scaleAnimation,
-              child: Icon(
-                Icons.album, // Replace with your listening icon
-                size: 60,
-                color: _colorAnimation.value,
-              ),
+            return Icon(
+              Icons.album, // Replace with your listening icon
+              size: 60,
+              color: _colorAnimation.value,
             );
           },
         ),

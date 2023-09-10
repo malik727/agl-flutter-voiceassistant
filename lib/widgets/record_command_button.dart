@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class RecordCommandButton extends StatefulWidget {
+  final ValueChanged<bool> onRecordingStateChanged;
+
+  RecordCommandButton({required this.onRecordingStateChanged});
+
   @override
-  _RecordCommandButtonState createState() => _RecordCommandButtonState();
+  RecordCommandButtonState createState() => RecordCommandButtonState();
 }
 
-class _RecordCommandButtonState extends State<RecordCommandButton> {
+class RecordCommandButtonState extends State<RecordCommandButton> {
   bool isRecording = false;
 
   @override
@@ -36,7 +40,8 @@ class _RecordCommandButtonState extends State<RecordCommandButton> {
               setState(() {
                 isRecording = !isRecording;
               });
-              // Implement recording logic here
+              // Call the callback function with the recording state
+              widget.onRecordingStateChanged(isRecording);
             },
             child: Center(
               child: Icon(
