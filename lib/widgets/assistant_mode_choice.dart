@@ -11,10 +11,10 @@ class AssistantModeChoice extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AssistantModeChoiceState createState() => _AssistantModeChoiceState();
+  AssistantModeChoiceState createState() => AssistantModeChoiceState();
 }
 
-class _AssistantModeChoiceState extends State<AssistantModeChoice> {
+class AssistantModeChoiceState extends State<AssistantModeChoice> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>(); // Watch the app state
