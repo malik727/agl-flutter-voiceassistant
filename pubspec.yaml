@@ -1,12 +1,10 @@
 name: agl_flutter_voiceassistant
 description: Offline voice assistant app designed for Automotive Grade Linux (AGL).
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
 version: 0.0.1+1
 
 environment:
-  sdk: '>=2.18.4 <3.0.0'
+  sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -20,10 +18,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^1.0.0
 
 flutter:
-  # uses-material-design: true
+  uses-material-design: true
   assets:
     - assets/agl_logo.png
     - assets/config.json
