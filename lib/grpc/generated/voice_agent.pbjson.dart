@@ -23,8 +23,8 @@ const RecordAction$json = {
 };
 
 /// Descriptor for `RecordAction`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List recordActionDescriptor = $convert.base64Decode(
-    'CgxSZWNvcmRBY3Rpb24SCQoFU1RBUlQQABIICgRTVE9QEAE=');
+final $typed_data.Uint8List recordActionDescriptor =
+    $convert.base64Decode('CgxSZWNvcmRBY3Rpb24SCQoFU1RBUlQQABIICgRTVE9QEAE=');
 
 @$core.Deprecated('Use nLUModelDescriptor instead')
 const NLUModel$json = {
@@ -36,8 +36,8 @@ const NLUModel$json = {
 };
 
 /// Descriptor for `NLUModel`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List nLUModelDescriptor = $convert.base64Decode(
-    'CghOTFVNb2RlbBIJCgVTTklQUxAAEggKBFJBU0EQAQ==');
+final $typed_data.Uint8List nLUModelDescriptor =
+    $convert.base64Decode('CghOTFVNb2RlbBIJCgVTTklQUxAAEggKBFJBU0EQAQ==');
 
 @$core.Deprecated('Use recordModeDescriptor instead')
 const RecordMode$json = {
@@ -49,8 +49,8 @@ const RecordMode$json = {
 };
 
 /// Descriptor for `RecordMode`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List recordModeDescriptor = $convert.base64Decode(
-    'CgpSZWNvcmRNb2RlEgoKBk1BTlVBTBAAEggKBEFVVE8QAQ==');
+final $typed_data.Uint8List recordModeDescriptor =
+    $convert.base64Decode('CgpSZWNvcmRNb2RlEgoKBk1BTlVBTBAAEggKBEFVVE8QAQ==');
 
 @$core.Deprecated('Use recognizeStatusTypeDescriptor instead')
 const RecognizeStatusType$json = {
@@ -94,8 +94,8 @@ const Empty$json = {
 };
 
 /// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
-    'CgVFbXB0eQ==');
+final $typed_data.Uint8List emptyDescriptor =
+    $convert.base64Decode('CgVFbXB0eQ==');
 
 @$core.Deprecated('Use serviceStatusDescriptor instead')
 const ServiceStatus$json = {
@@ -120,16 +120,37 @@ const WakeWordStatus$json = {
 };
 
 /// Descriptor for `WakeWordStatus`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List wakeWordStatusDescriptor = $convert.base64Decode(
-    'Cg5XYWtlV29yZFN0YXR1cxIWCgZzdGF0dXMYASABKAhSBnN0YXR1cw==');
+final $typed_data.Uint8List wakeWordStatusDescriptor = $convert
+    .base64Decode('Cg5XYWtlV29yZFN0YXR1cxIWCgZzdGF0dXMYASABKAhSBnN0YXR1cw==');
 
 @$core.Deprecated('Use recognizeControlDescriptor instead')
 const RecognizeControl$json = {
   '1': 'RecognizeControl',
   '2': [
-    {'1': 'action', '3': 1, '4': 1, '5': 14, '6': '.RecordAction', '10': 'action'},
-    {'1': 'nlu_model', '3': 2, '4': 1, '5': 14, '6': '.NLUModel', '10': 'nluModel'},
-    {'1': 'record_mode', '3': 3, '4': 1, '5': 14, '6': '.RecordMode', '10': 'recordMode'},
+    {
+      '1': 'action',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.RecordAction',
+      '10': 'action'
+    },
+    {
+      '1': 'nlu_model',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.NLUModel',
+      '10': 'nluModel'
+    },
+    {
+      '1': 'record_mode',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.RecordMode',
+      '10': 'recordMode'
+    },
     {'1': 'stream_id', '3': 4, '4': 1, '5': 9, '10': 'streamId'},
   ],
 };
@@ -160,9 +181,23 @@ const RecognizeResult$json = {
   '2': [
     {'1': 'command', '3': 1, '4': 1, '5': 9, '10': 'command'},
     {'1': 'intent', '3': 2, '4': 1, '5': 9, '10': 'intent'},
-    {'1': 'intent_slots', '3': 3, '4': 3, '5': 11, '6': '.IntentSlot', '10': 'intentSlots'},
+    {
+      '1': 'intent_slots',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.IntentSlot',
+      '10': 'intentSlots'
+    },
     {'1': 'stream_id', '3': 4, '4': 1, '5': 9, '10': 'streamId'},
-    {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.RecognizeStatusType', '10': 'status'},
+    {
+      '1': 'status',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.RecognizeStatusType',
+      '10': 'status'
+    },
   ],
 };
 
@@ -178,7 +213,14 @@ const ExecuteInput$json = {
   '1': 'ExecuteInput',
   '2': [
     {'1': 'intent', '3': 1, '4': 1, '5': 9, '10': 'intent'},
-    {'1': 'intent_slots', '3': 2, '4': 3, '5': 11, '6': '.IntentSlot', '10': 'intentSlots'},
+    {
+      '1': 'intent_slots',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.IntentSlot',
+      '10': 'intentSlots'
+    },
   ],
 };
 
@@ -191,12 +233,19 @@ final $typed_data.Uint8List executeInputDescriptor = $convert.base64Decode(
 const ExecuteResult$json = {
   '1': 'ExecuteResult',
   '2': [
-    {'1': 'status', '3': 1, '4': 1, '5': 14, '6': '.ExecuteStatusType', '10': 'status'},
+    {'1': 'response', '3': 1, '4': 1, '5': 9, '10': 'response'},
+    {
+      '1': 'status',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.ExecuteStatusType',
+      '10': 'status'
+    },
   ],
 };
 
 /// Descriptor for `ExecuteResult`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List executeResultDescriptor = $convert.base64Decode(
-    'Cg1FeGVjdXRlUmVzdWx0EioKBnN0YXR1cxgBIAEoDjISLkV4ZWN1dGVTdGF0dXNUeXBlUgZzdG'
-    'F0dXM=');
-
+    'Cg1FeGVjdXRlUmVzdWx0EhoKCHJlc3BvbnNlGAEgASgJUghyZXNwb25zZRIqCgZzdGF0dXMYAi'
+    'ABKA4yEi5FeGVjdXRlU3RhdHVzVHlwZVIGc3RhdHVz');

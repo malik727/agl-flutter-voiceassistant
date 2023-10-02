@@ -1,4 +1,4 @@
 {
-    "grpc_host": "localhost",
+    "grpc_host": "192.168.18.19",
     "grpc_port": 51053
 }

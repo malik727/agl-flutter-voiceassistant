@@ -99,7 +99,13 @@ class HomePageState extends State<HomePage> {
     if (isRecording) {
       appState.streamId = await startRecording();
     } else {
-      await stopRecording(appState.streamId, appState.intentEngine);
+      final response =
+          await stopRecording(appState.streamId, appState.intentEngine);
+      // Process and store the result
+      if (response.status == RecognizeStatusType.REC_SUCCESS) {
+        await executeVoiceCommand(
+            response); // Call executeVoiceCommand with the response
+      }
     }
   }
 
@@ -172,7 +178,8 @@ class HomePageState extends State<HomePage> {
     return streamId;
   }
 
-  Future<void> stopRecording(String streamId, String nluModel) async {
+  Future<RecognizeResult> stopRecording(
+      String streamId, String nluModel) async {
     try {
       NLUModel model = NLUModel.RASA;
       if (nluModel == "snips") {
@@ -208,9 +215,45 @@ class HomePageState extends State<HomePage> {
         addChatMessage(
             'Failed to process your voice command. Please try again.');
       }
+      await voiceAgentClient.shutdown();
+      return response;
     } catch (e) {
       print('Error stopping recording: $e');
       addChatMessage('Failed to process your voice command. Please try again.');
+      await voiceAgentClient.shutdown();
+      return RecognizeResult()..status = RecognizeStatusType.REC_ERROR;
+    }
+    // await voiceAgentClient.shutdown();
+  }
+
+  Future<void> executeVoiceCommand(RecognizeResult response) async {
+    voiceAgentClient = VoiceAgentClient(_config.grpcHost, _config.grpcPort);
+    try {
+      // Create an ExecuteInput message using the response from stopRecording
+      final executeInput = ExecuteInput()
+        ..intent = response.intent
+        ..intentSlots.addAll(response.intentSlots);
+
+      // Call the gRPC method to execute the voice command
+      final execResponse =
+          await voiceAgentClient.executeVoiceCommand(executeInput);
+
+      // Handle the response as needed
+      if (execResponse.status == ExecuteStatusType.EXEC_SUCCESS) {
+        final commandResponse = execResponse.response;
+        addChatMessage(commandResponse);
+      } else if (execResponse.status == ExecuteStatusType.KUKSA_CONN_ERROR) {
+        final commandResponse = execResponse.response;
+        addChatMessage(commandResponse);
+      } else {
+        // Handle the case when execution fails
+        addChatMessage(
+            'Failed to execute your voice command. Please try again.');
+      }
+    } catch (e) {
+      print('Error executing voice command: $e');
+      // Handle any errors that occur during the gRPC call
+      addChatMessage('Failed to execute your voice command. Please try again.');
     }
     await voiceAgentClient.shutdown();
   }
