@@ -132,6 +132,7 @@ class AssistantModeChoiceState extends State<AssistantModeChoice> {
                   'Wake Word',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 18,
                     color: _selectedMode == AssistantMode.wakeWord
                         ? Colors.white
                         : Colors.green,
@@ -176,6 +177,7 @@ class AssistantModeChoiceState extends State<AssistantModeChoice> {
                   'Manual',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 18,
                     color: _selectedMode == AssistantMode.manual
                         ? Colors.white
                         : Colors.green,

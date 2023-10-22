@@ -267,7 +267,7 @@ class HomePageState extends State<HomePage> {
         child: Center(
           child: SizedBox(
             width:
-                MediaQuery.of(context).size.width * 0.7, // 70% of screen width
+                MediaQuery.of(context).size.width * 0.85, // 85% of screen width
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -278,7 +278,7 @@ class HomePageState extends State<HomePage> {
                 ),
                 Text(
                   "AGL Voice Assistant",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 30),
                 Row(
@@ -299,7 +299,7 @@ class HomePageState extends State<HomePage> {
                               Text(
                                 'Assistant Mode',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -339,7 +339,7 @@ class HomePageState extends State<HomePage> {
                               Text(
                                 'Intent Engine',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

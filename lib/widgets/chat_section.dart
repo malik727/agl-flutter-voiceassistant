@@ -29,7 +29,7 @@ class ChatSection extends StatelessWidget {
               'Command Logs',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 20,
               ),
             ),
           ),
@@ -106,7 +106,7 @@ class ChatMessageTile extends StatelessWidget {
                 ),
                 child: Text(
                   message.text,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                   maxLines: null,
                 ),
               ),

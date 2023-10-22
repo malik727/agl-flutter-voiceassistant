@@ -33,7 +33,7 @@ class ErrorScreen extends StatelessWidget {
                 'Unable to connect to the voice assistant backend. Make sure the "agl-voiceagent-service" is up and running in server mode with correct config values.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   color: Colors.grey[700],
                 ),
               ),
