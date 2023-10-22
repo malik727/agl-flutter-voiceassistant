@@ -1,4 +1,4 @@
-# agl_flutter_voiceassistant
+# Flutter Voice Assistant
 
 A new Flutter project.
 

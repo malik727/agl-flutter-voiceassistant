@@ -1,6 +1,6 @@
 {
-    "name": "agl_flutter_voiceassistant",
-    "short_name": "agl_flutter_voiceassistant",
+    "name": "flutter_voiceassistant",
+    "short_name": "flutter_voiceassistant",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

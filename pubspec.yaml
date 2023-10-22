@@ -1,4 +1,4 @@
-name: agl_flutter_voiceassistant
+name: flutter_voiceassistant
 description: Offline voice assistant app designed for Automotive Grade Linux (AGL).
 
 version: 0.0.1+1
