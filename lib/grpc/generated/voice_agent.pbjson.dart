@@ -103,13 +103,14 @@ const ServiceStatus$json = {
   '2': [
     {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
     {'1': 'status', '3': 2, '4': 1, '5': 8, '10': 'status'},
+    {'1': 'wake_word', '3': 3, '4': 1, '5': 9, '10': 'wakeWord'},
   ],
 };
 
 /// Descriptor for `ServiceStatus`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List serviceStatusDescriptor = $convert.base64Decode(
     'Cg1TZXJ2aWNlU3RhdHVzEhgKB3ZlcnNpb24YASABKAlSB3ZlcnNpb24SFgoGc3RhdHVzGAIgAS'
-    'gIUgZzdGF0dXM=');
+    'gIUgZzdGF0dXMSGwoJd2FrZV93b3JkGAMgASgJUgh3YWtlV29yZA==');
 
 @$core.Deprecated('Use wakeWordStatusDescriptor instead')
 const WakeWordStatus$json = {

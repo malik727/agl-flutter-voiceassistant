@@ -5,4 +5,6 @@ class AppState extends ChangeNotifier {
   bool isWakeWordMode = false;
   String intentEngine = "snips";
   String streamId = "";
+  bool isCommandProcessing = false;
+  String commandProcessingText = "Processing...";
 }

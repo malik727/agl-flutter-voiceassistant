@@ -20,22 +20,24 @@ class ChatSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chat heading
           Container(
-            padding: EdgeInsets.all(6),
-            alignment: Alignment.center,
+            padding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+            // alignment: Alignment.l,
             child: Text(
-              'Command Logs',
+              'Conversation Logs',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 18,
               ),
+              textAlign: TextAlign.left,
             ),
           ),
           // Chat messages with fixed height
           Container(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(10),
             height: 180, // Adjust the height as needed
             child: ListView.builder(
               controller: scrollController,
@@ -106,7 +108,7 @@ class ChatMessageTile extends StatelessWidget {
                 ),
                 child: Text(
                   message.text,
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style: TextStyle(color: Colors.white, fontSize: 17),
                   maxLines: null,
                 ),
               ),

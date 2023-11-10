@@ -58,6 +58,7 @@ class ServiceStatus extends $pb.GeneratedMessage {
   factory ServiceStatus({
     $core.String? version,
     $core.bool? status,
+    $core.String? wakeWord,
   }) {
     final $result = create();
     if (version != null) {
@@ -65,6 +66,9 @@ class ServiceStatus extends $pb.GeneratedMessage {
     }
     if (status != null) {
       $result.status = status;
+    }
+    if (wakeWord != null) {
+      $result.wakeWord = wakeWord;
     }
     return $result;
   }
@@ -81,6 +85,7 @@ class ServiceStatus extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'version')
     ..aOB(2, _omitFieldNames ? '' : 'status')
+    ..aOS(3, _omitFieldNames ? '' : 'wakeWord')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('Using this can add significant overhead to your binary. '
@@ -129,6 +134,18 @@ class ServiceStatus extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(1);
   @$pb.TagNumber(2)
   void clearStatus() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get wakeWord => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set wakeWord($core.String v) {
+    $_setString(2, v);
+  }
+
+  @$pb.TagNumber(3)
+  $core.bool hasWakeWord() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWakeWord() => clearField(3);
 }
 
 class WakeWordStatus extends $pb.GeneratedMessage {

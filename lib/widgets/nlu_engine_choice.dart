@@ -130,7 +130,7 @@ class _NLUEngineChoiceState extends State<NLUEngineChoice> {
                   'Snips',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 17,
                     color: _selectedEngine == NLUEngine.snips
                         ? Colors.white
                         : Colors.green,
@@ -175,7 +175,7 @@ class _NLUEngineChoiceState extends State<NLUEngineChoice> {
                   'RASA',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 17,
                     color: _selectedEngine == NLUEngine.rasa
                         ? Colors.white
                         : Colors.green,

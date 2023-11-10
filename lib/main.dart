@@ -19,6 +19,7 @@ void main() async {
   // Check the service status initially
   final initialServiceStatus = await checkServiceStatus(config);
   serviceStatusProvider.setServiceStatus(initialServiceStatus.status);
+  serviceStatusProvider.setWakeWord(initialServiceStatus.wakeWord);
 
   runApp(
     MultiProvider(
@@ -35,6 +36,9 @@ void main() async {
           if (serviceStatus.status) {
             serviceStatusProvider
                 .setServiceStatus(true); // Update the service status
+
+            serviceStatusProvider
+                .setWakeWord(serviceStatus.wakeWord); // Update the wake word
           }
         },
       ),
@@ -66,7 +70,7 @@ class App extends StatelessWidget {
       home: Consumer<ServiceStatusProvider>(
         builder: (context, provider, child) {
           return provider.isServiceOnline
-              ? HomePage(config: config)
+              ? HomePage(config: config, wakeWord: provider.wakeWord)
               : ErrorScreen(
                   onRetry: onRetry, // Pass the callback to the ErrorScreen
                 ); // Conditionally render HomePage or ErrorScreen
