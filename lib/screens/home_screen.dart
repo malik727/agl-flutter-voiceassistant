@@ -107,13 +107,13 @@ class HomePageState extends State<HomePage> {
       appState.commandProcessingText = "Converting speech to text...";
       appState.isCommandProcessing = true;
       setState(
-          () {}); // Trigger a rebuild to ensure the loading indicator is shown
+          () {}); // Trigger a rebuild to ensure the loading indicator is shown, tis a bad practice though but deosn't heavily affect the performance
       final response =
           await stopRecording(appState.streamId, appState.intentEngine);
       // Process and store the result
       if (response.status == RecognizeStatusType.REC_SUCCESS) {
         appState.commandProcessingText = "Executing command...";
-        await executeVoiceCommand(
+        await executeCommand(
             response); // Call executeVoiceCommand with the response
       }
       appState.isCommandProcessing = false;
@@ -169,7 +169,7 @@ class HomePageState extends State<HomePage> {
     voiceAgentClient = VoiceAgentClient(_config.grpcHost, _config.grpcPort);
     try {
       // Create a RecognizeControl message to start recording
-      final controlMessage = RecognizeControl()
+      final controlMessage = RecognizeVoiceControl()
         ..action = RecordAction.START
         ..recordMode = RecordMode
             .MANUAL; // You can change this to your desired record mode
@@ -197,7 +197,7 @@ class HomePageState extends State<HomePage> {
         model = NLUModel.SNIPS;
       }
       // Create a RecognizeControl message to stop recording
-      final controlMessage = RecognizeControl()
+      final controlMessage = RecognizeVoiceControl()
         ..action = RecordAction.STOP
         ..nluModel = model
         ..streamId =
@@ -237,7 +237,46 @@ class HomePageState extends State<HomePage> {
     // await voiceAgentClient.shutdown();
   }
 
-  Future<void> executeVoiceCommand(RecognizeResult response) async {
+  Future<RecognizeResult> recognizeTextCommand(
+      String command, String nluModel) async {
+    voiceAgentClient = VoiceAgentClient(_config.grpcHost, _config.grpcPort);
+    try {
+      NLUModel model = NLUModel.RASA;
+      if (nluModel == "snips") {
+        model = NLUModel.SNIPS;
+      }
+      // Create a RecognizeControl message to stop recording
+      final controlMessage = RecognizeTextControl()
+        ..textCommand = command
+        ..nluModel = model;
+
+      // Call the gRPC method to stop recording
+      final response =
+          await voiceAgentClient.recognizeTextCommand(controlMessage);
+
+      // Process and store the result
+      if (response.status == RecognizeStatusType.REC_SUCCESS) {
+        // Do nothing
+      } else if (response.status == RecognizeStatusType.INTENT_NOT_RECOGNIZED) {
+        final command = response.command;
+        addChatMessage(command, isUserMessage: true);
+        addChatMessage(
+            "Unable to undertsand the intent behind your request. Please try again.");
+      } else {
+        addChatMessage(
+            'Failed to process your text command. Please try again.');
+      }
+      await voiceAgentClient.shutdown();
+      return response;
+    } catch (e) {
+      print('Error encountered during text command recognition: $e');
+      addChatMessage('Failed to process your text command. Please try again.');
+      await voiceAgentClient.shutdown();
+      return RecognizeResult()..status = RecognizeStatusType.REC_ERROR;
+    }
+  }
+
+  Future<void> executeCommand(RecognizeResult response) async {
     voiceAgentClient = VoiceAgentClient(_config.grpcHost, _config.grpcPort);
     try {
       // Create an ExecuteInput message using the response from stopRecording
@@ -246,8 +285,7 @@ class HomePageState extends State<HomePage> {
         ..intentSlots.addAll(response.intentSlots);
 
       // Call the gRPC method to execute the voice command
-      final execResponse =
-          await voiceAgentClient.executeVoiceCommand(executeInput);
+      final execResponse = await voiceAgentClient.executeCommand(executeInput);
 
       // Handle the response as needed
       if (execResponse.status == ExecuteStatusType.EXEC_SUCCESS) {
@@ -269,8 +307,26 @@ class HomePageState extends State<HomePage> {
     await voiceAgentClient.shutdown();
   }
 
-  void handleCommandTap(String command) {
+  Future<void> handleCommandTap(String command) async {
+    final appState = context.read<AppState>();
     addChatMessage(command, isUserMessage: true);
+    appState.isCommandProcessing = true;
+    appState.commandProcessingText = "Recognizing intent...";
+
+    setState(
+        () {}); // Trigger a rebuild to ensure the loading indicator is shown, tis a bad practice though but deosn't heavily affect the performance
+
+    final response = await recognizeTextCommand(command, appState.intentEngine);
+    // Process and store the result
+    if (response.status == RecognizeStatusType.REC_SUCCESS) {
+      appState.commandProcessingText = "Executing command...";
+      setState(
+          () {}); // Trigger a rebuild to ensure the loading indicator is shown, tis a bad practice though but deosn't heavily affect the performance
+      await executeCommand(
+          response); // Call executeVoiceCommand with the response
+    }
+
+    appState.isCommandProcessing = false;
   }
 
   @override
@@ -385,7 +441,8 @@ class HomePageState extends State<HomePage> {
                   addChatMessage: addChatMessage,
                 ),
                 SizedBox(height: 10),
-                TryCommandsSection(onCommandTap: handleCommandTap),
+                if (!appState.isWakeWordMode || appState.isWakeWordDetected)
+                  TryCommandsSection(onCommandTap: handleCommandTap),
                 SizedBox(height: 30),
                 if (!appState.isWakeWordMode || appState.isWakeWordDetected)
                   if (!appState.isCommandProcessing)

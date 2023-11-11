@@ -43,7 +43,7 @@ class VoiceAgentClient {
   }
 
   Future<RecognizeResult> recognizeVoiceCommand(
-      Stream<RecognizeControl> controlStream) async {
+      Stream<RecognizeVoiceControl> controlStream) async {
     try {
       final response = await _client.recognizeVoiceCommand(controlStream);
       return response;
@@ -54,9 +54,21 @@ class VoiceAgentClient {
     }
   }
 
-  Future<ExecuteResult> executeVoiceCommand(ExecuteInput input) async {
+  Future<RecognizeResult> recognizeTextCommand(
+      RecognizeTextControl controlInput) async {
     try {
-      final response = await _client.executeVoiceCommand(input);
+      final response = await _client.recognizeTextCommand(controlInput);
+      return response;
+    } catch (e) {
+      print('Error calling RecognizeTextCommand: $e');
+      // Handle the error gracefully, such as returning a default RecognizeResult
+      return RecognizeResult()..status = RecognizeStatusType.REC_ERROR;
+    }
+  }
+
+  Future<ExecuteResult> executeCommand(ExecuteInput input) async {
+    try {
+      final response = await _client.executeCommand(input);
       return response;
     } catch (e) {
       print('Error calling ExecuteVoiceCommand: $e');

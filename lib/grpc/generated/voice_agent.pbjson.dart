@@ -23,8 +23,8 @@ const RecordAction$json = {
 };
 
 /// Descriptor for `RecordAction`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List recordActionDescriptor =
-    $convert.base64Decode('CgxSZWNvcmRBY3Rpb24SCQoFU1RBUlQQABIICgRTVE9QEAE=');
+final $typed_data.Uint8List recordActionDescriptor = $convert.base64Decode(
+    'CgxSZWNvcmRBY3Rpb24SCQoFU1RBUlQQABIICgRTVE9QEAE=');
 
 @$core.Deprecated('Use nLUModelDescriptor instead')
 const NLUModel$json = {
@@ -36,8 +36,8 @@ const NLUModel$json = {
 };
 
 /// Descriptor for `NLUModel`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List nLUModelDescriptor =
-    $convert.base64Decode('CghOTFVNb2RlbBIJCgVTTklQUxAAEggKBFJBU0EQAQ==');
+final $typed_data.Uint8List nLUModelDescriptor = $convert.base64Decode(
+    'CghOTFVNb2RlbBIJCgVTTklQUxAAEggKBFJBU0EQAQ==');
 
 @$core.Deprecated('Use recordModeDescriptor instead')
 const RecordMode$json = {
@@ -49,8 +49,8 @@ const RecordMode$json = {
 };
 
 /// Descriptor for `RecordMode`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List recordModeDescriptor =
-    $convert.base64Decode('CgpSZWNvcmRNb2RlEgoKBk1BTlVBTBAAEggKBEFVVE8QAQ==');
+final $typed_data.Uint8List recordModeDescriptor = $convert.base64Decode(
+    'CgpSZWNvcmRNb2RlEgoKBk1BTlVBTBAAEggKBEFVVE8QAQ==');
 
 @$core.Deprecated('Use recognizeStatusTypeDescriptor instead')
 const RecognizeStatusType$json = {
@@ -61,6 +61,8 @@ const RecognizeStatusType$json = {
     {'1': 'REC_PROCESSING', '2': 2},
     {'1': 'VOICE_NOT_RECOGNIZED', '2': 3},
     {'1': 'INTENT_NOT_RECOGNIZED', '2': 4},
+    {'1': 'TEXT_NOT_RECOGNIZED', '2': 5},
+    {'1': 'NLU_MODEL_NOT_SUPPORTED', '2': 6},
   ],
 };
 
@@ -68,7 +70,8 @@ const RecognizeStatusType$json = {
 final $typed_data.Uint8List recognizeStatusTypeDescriptor = $convert.base64Decode(
     'ChNSZWNvZ25pemVTdGF0dXNUeXBlEg0KCVJFQ19FUlJPUhAAEg8KC1JFQ19TVUNDRVNTEAESEg'
     'oOUkVDX1BST0NFU1NJTkcQAhIYChRWT0lDRV9OT1RfUkVDT0dOSVpFRBADEhkKFUlOVEVOVF9O'
-    'T1RfUkVDT0dOSVpFRBAE');
+    'T1RfUkVDT0dOSVpFRBAEEhcKE1RFWFRfTk9UX1JFQ09HTklaRUQQBRIbChdOTFVfTU9ERUxfTk'
+    '9UX1NVUFBPUlRFRBAG');
 
 @$core.Deprecated('Use executeStatusTypeDescriptor instead')
 const ExecuteStatusType$json = {
@@ -94,8 +97,8 @@ const Empty$json = {
 };
 
 /// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List emptyDescriptor =
-    $convert.base64Decode('CgVFbXB0eQ==');
+final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
+    'CgVFbXB0eQ==');
 
 @$core.Deprecated('Use serviceStatusDescriptor instead')
 const ServiceStatus$json = {
@@ -112,6 +115,23 @@ final $typed_data.Uint8List serviceStatusDescriptor = $convert.base64Decode(
     'Cg1TZXJ2aWNlU3RhdHVzEhgKB3ZlcnNpb24YASABKAlSB3ZlcnNpb24SFgoGc3RhdHVzGAIgAS'
     'gIUgZzdGF0dXMSGwoJd2FrZV93b3JkGAMgASgJUgh3YWtlV29yZA==');
 
+@$core.Deprecated('Use voiceAudioDescriptor instead')
+const VoiceAudio$json = {
+  '1': 'VoiceAudio',
+  '2': [
+    {'1': 'audio_chunk', '3': 1, '4': 1, '5': 12, '10': 'audioChunk'},
+    {'1': 'audio_format', '3': 2, '4': 1, '5': 9, '10': 'audioFormat'},
+    {'1': 'sample_rate', '3': 3, '4': 1, '5': 5, '10': 'sampleRate'},
+    {'1': 'language', '3': 4, '4': 1, '5': 9, '10': 'language'},
+  ],
+};
+
+/// Descriptor for `VoiceAudio`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List voiceAudioDescriptor = $convert.base64Decode(
+    'CgpWb2ljZUF1ZGlvEh8KC2F1ZGlvX2NodW5rGAEgASgMUgphdWRpb0NodW5rEiEKDGF1ZGlvX2'
+    'Zvcm1hdBgCIAEoCVILYXVkaW9Gb3JtYXQSHwoLc2FtcGxlX3JhdGUYAyABKAVSCnNhbXBsZVJh'
+    'dGUSGgoIbGFuZ3VhZ2UYBCABKAlSCGxhbmd1YWdl');
+
 @$core.Deprecated('Use wakeWordStatusDescriptor instead')
 const WakeWordStatus$json = {
   '1': 'WakeWordStatus',
@@ -121,47 +141,56 @@ const WakeWordStatus$json = {
 };
 
 /// Descriptor for `WakeWordStatus`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List wakeWordStatusDescriptor = $convert
-    .base64Decode('Cg5XYWtlV29yZFN0YXR1cxIWCgZzdGF0dXMYASABKAhSBnN0YXR1cw==');
+final $typed_data.Uint8List wakeWordStatusDescriptor = $convert.base64Decode(
+    'Cg5XYWtlV29yZFN0YXR1cxIWCgZzdGF0dXMYASABKAhSBnN0YXR1cw==');
 
-@$core.Deprecated('Use recognizeControlDescriptor instead')
-const RecognizeControl$json = {
-  '1': 'RecognizeControl',
+@$core.Deprecated('Use s_RecognizeVoiceControlDescriptor instead')
+const S_RecognizeVoiceControl$json = {
+  '1': 'S_RecognizeVoiceControl',
   '2': [
-    {
-      '1': 'action',
-      '3': 1,
-      '4': 1,
-      '5': 14,
-      '6': '.RecordAction',
-      '10': 'action'
-    },
-    {
-      '1': 'nlu_model',
-      '3': 2,
-      '4': 1,
-      '5': 14,
-      '6': '.NLUModel',
-      '10': 'nluModel'
-    },
-    {
-      '1': 'record_mode',
-      '3': 3,
-      '4': 1,
-      '5': 14,
-      '6': '.RecordMode',
-      '10': 'recordMode'
-    },
+    {'1': 'audio_stream', '3': 1, '4': 1, '5': 11, '6': '.VoiceAudio', '10': 'audioStream'},
+    {'1': 'nlu_model', '3': 2, '4': 1, '5': 14, '6': '.NLUModel', '10': 'nluModel'},
+    {'1': 'stream_id', '3': 3, '4': 1, '5': 9, '10': 'streamId'},
+  ],
+};
+
+/// Descriptor for `S_RecognizeVoiceControl`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_RecognizeVoiceControlDescriptor = $convert.base64Decode(
+    'ChdTX1JlY29nbml6ZVZvaWNlQ29udHJvbBIuCgxhdWRpb19zdHJlYW0YASABKAsyCy5Wb2ljZU'
+    'F1ZGlvUgthdWRpb1N0cmVhbRImCglubHVfbW9kZWwYAiABKA4yCS5OTFVNb2RlbFIIbmx1TW9k'
+    'ZWwSGwoJc3RyZWFtX2lkGAMgASgJUghzdHJlYW1JZA==');
+
+@$core.Deprecated('Use recognizeVoiceControlDescriptor instead')
+const RecognizeVoiceControl$json = {
+  '1': 'RecognizeVoiceControl',
+  '2': [
+    {'1': 'action', '3': 1, '4': 1, '5': 14, '6': '.RecordAction', '10': 'action'},
+    {'1': 'nlu_model', '3': 2, '4': 1, '5': 14, '6': '.NLUModel', '10': 'nluModel'},
+    {'1': 'record_mode', '3': 3, '4': 1, '5': 14, '6': '.RecordMode', '10': 'recordMode'},
     {'1': 'stream_id', '3': 4, '4': 1, '5': 9, '10': 'streamId'},
   ],
 };
 
-/// Descriptor for `RecognizeControl`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List recognizeControlDescriptor = $convert.base64Decode(
-    'ChBSZWNvZ25pemVDb250cm9sEiUKBmFjdGlvbhgBIAEoDjINLlJlY29yZEFjdGlvblIGYWN0aW'
-    '9uEiYKCW5sdV9tb2RlbBgCIAEoDjIJLk5MVU1vZGVsUghubHVNb2RlbBIsCgtyZWNvcmRfbW9k'
-    'ZRgDIAEoDjILLlJlY29yZE1vZGVSCnJlY29yZE1vZGUSGwoJc3RyZWFtX2lkGAQgASgJUghzdH'
-    'JlYW1JZA==');
+/// Descriptor for `RecognizeVoiceControl`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List recognizeVoiceControlDescriptor = $convert.base64Decode(
+    'ChVSZWNvZ25pemVWb2ljZUNvbnRyb2wSJQoGYWN0aW9uGAEgASgOMg0uUmVjb3JkQWN0aW9uUg'
+    'ZhY3Rpb24SJgoJbmx1X21vZGVsGAIgASgOMgkuTkxVTW9kZWxSCG5sdU1vZGVsEiwKC3JlY29y'
+    'ZF9tb2RlGAMgASgOMgsuUmVjb3JkTW9kZVIKcmVjb3JkTW9kZRIbCglzdHJlYW1faWQYBCABKA'
+    'lSCHN0cmVhbUlk');
+
+@$core.Deprecated('Use recognizeTextControlDescriptor instead')
+const RecognizeTextControl$json = {
+  '1': 'RecognizeTextControl',
+  '2': [
+    {'1': 'text_command', '3': 1, '4': 1, '5': 9, '10': 'textCommand'},
+    {'1': 'nlu_model', '3': 2, '4': 1, '5': 14, '6': '.NLUModel', '10': 'nluModel'},
+  ],
+};
+
+/// Descriptor for `RecognizeTextControl`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List recognizeTextControlDescriptor = $convert.base64Decode(
+    'ChRSZWNvZ25pemVUZXh0Q29udHJvbBIhCgx0ZXh0X2NvbW1hbmQYASABKAlSC3RleHRDb21tYW'
+    '5kEiYKCW5sdV9tb2RlbBgCIAEoDjIJLk5MVU1vZGVsUghubHVNb2RlbA==');
 
 @$core.Deprecated('Use intentSlotDescriptor instead')
 const IntentSlot$json = {
@@ -182,23 +211,9 @@ const RecognizeResult$json = {
   '2': [
     {'1': 'command', '3': 1, '4': 1, '5': 9, '10': 'command'},
     {'1': 'intent', '3': 2, '4': 1, '5': 9, '10': 'intent'},
-    {
-      '1': 'intent_slots',
-      '3': 3,
-      '4': 3,
-      '5': 11,
-      '6': '.IntentSlot',
-      '10': 'intentSlots'
-    },
+    {'1': 'intent_slots', '3': 3, '4': 3, '5': 11, '6': '.IntentSlot', '10': 'intentSlots'},
     {'1': 'stream_id', '3': 4, '4': 1, '5': 9, '10': 'streamId'},
-    {
-      '1': 'status',
-      '3': 5,
-      '4': 1,
-      '5': 14,
-      '6': '.RecognizeStatusType',
-      '10': 'status'
-    },
+    {'1': 'status', '3': 5, '4': 1, '5': 14, '6': '.RecognizeStatusType', '10': 'status'},
   ],
 };
 
@@ -214,14 +229,7 @@ const ExecuteInput$json = {
   '1': 'ExecuteInput',
   '2': [
     {'1': 'intent', '3': 1, '4': 1, '5': 9, '10': 'intent'},
-    {
-      '1': 'intent_slots',
-      '3': 2,
-      '4': 3,
-      '5': 11,
-      '6': '.IntentSlot',
-      '10': 'intentSlots'
-    },
+    {'1': 'intent_slots', '3': 2, '4': 3, '5': 11, '6': '.IntentSlot', '10': 'intentSlots'},
   ],
 };
 
@@ -235,14 +243,7 @@ const ExecuteResult$json = {
   '1': 'ExecuteResult',
   '2': [
     {'1': 'response', '3': 1, '4': 1, '5': 9, '10': 'response'},
-    {
-      '1': 'status',
-      '3': 2,
-      '4': 1,
-      '5': 14,
-      '6': '.ExecuteStatusType',
-      '10': 'status'
-    },
+    {'1': 'status', '3': 2, '4': 1, '5': 14, '6': '.ExecuteStatusType', '10': 'status'},
   ],
 };
 
@@ -250,3 +251,4 @@ const ExecuteResult$json = {
 final $typed_data.Uint8List executeResultDescriptor = $convert.base64Decode(
     'Cg1FeGVjdXRlUmVzdWx0EhoKCHJlc3BvbnNlGAEgASgJUghyZXNwb25zZRIqCgZzdGF0dXMYAi'
     'ABKA4yEi5FeGVjdXRlU3RhdHVzVHlwZVIGc3RhdHVz');
+

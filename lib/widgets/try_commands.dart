@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TryCommandsSection extends StatelessWidget {
-  final Function(String) onCommandTap; // Define a callback
+  final Future<void> Function(String) onCommandTap; // Define a callback
 
   TryCommandsSection({required this.onCommandTap});
 
@@ -47,7 +47,7 @@ class TryCommandsSection extends StatelessWidget {
                   spacing: 10,
                   children: [
                     buildCommandButton("Set the volume to fifty percent"),
-                    buildCommandButton("Set the fan speed to a maximum"),
+                    buildCommandButton("Set the fan speed to max"),
                     buildCommandButton(
                         "Increase the temperature by three degrees"),
                     buildCommandButton(

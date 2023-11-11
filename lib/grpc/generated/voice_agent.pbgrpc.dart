@@ -26,20 +26,37 @@ class VoiceAgentServiceClient extends $grpc.Client {
           '/VoiceAgentService/CheckServiceStatus',
           ($0.Empty value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.ServiceStatus.fromBuffer(value));
+  static final _$s_DetectWakeWord =
+      $grpc.ClientMethod<$0.VoiceAudio, $0.WakeWordStatus>(
+          '/VoiceAgentService/S_DetectWakeWord',
+          ($0.VoiceAudio value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.WakeWordStatus.fromBuffer(value));
   static final _$detectWakeWord =
       $grpc.ClientMethod<$0.Empty, $0.WakeWordStatus>(
           '/VoiceAgentService/DetectWakeWord',
           ($0.Empty value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.WakeWordStatus.fromBuffer(value));
-  static final _$recognizeVoiceCommand =
-      $grpc.ClientMethod<$0.RecognizeControl, $0.RecognizeResult>(
-          '/VoiceAgentService/RecognizeVoiceCommand',
-          ($0.RecognizeControl value) => value.writeToBuffer(),
+  static final _$s_RecognizeVoiceCommand =
+      $grpc.ClientMethod<$0.S_RecognizeVoiceControl, $0.RecognizeResult>(
+          '/VoiceAgentService/S_RecognizeVoiceCommand',
+          ($0.S_RecognizeVoiceControl value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.RecognizeResult.fromBuffer(value));
-  static final _$executeVoiceCommand =
+  static final _$recognizeVoiceCommand =
+      $grpc.ClientMethod<$0.RecognizeVoiceControl, $0.RecognizeResult>(
+          '/VoiceAgentService/RecognizeVoiceCommand',
+          ($0.RecognizeVoiceControl value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.RecognizeResult.fromBuffer(value));
+  static final _$recognizeTextCommand =
+      $grpc.ClientMethod<$0.RecognizeTextControl, $0.RecognizeResult>(
+          '/VoiceAgentService/RecognizeTextCommand',
+          ($0.RecognizeTextControl value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.RecognizeResult.fromBuffer(value));
+  static final _$executeCommand =
       $grpc.ClientMethod<$0.ExecuteInput, $0.ExecuteResult>(
-          '/VoiceAgentService/ExecuteVoiceCommand',
+          '/VoiceAgentService/ExecuteCommand',
           ($0.ExecuteInput value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.ExecuteResult.fromBuffer(value));
 
@@ -53,6 +70,12 @@ class VoiceAgentServiceClient extends $grpc.Client {
     return $createUnaryCall(_$checkServiceStatus, request, options: options);
   }
 
+  $grpc.ResponseStream<$0.WakeWordStatus> s_DetectWakeWord(
+      $async.Stream<$0.VoiceAudio> request,
+      {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$s_DetectWakeWord, request, options: options);
+  }
+
   $grpc.ResponseStream<$0.WakeWordStatus> detectWakeWord($0.Empty request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
@@ -60,18 +83,31 @@ class VoiceAgentServiceClient extends $grpc.Client {
         options: options);
   }
 
+  $grpc.ResponseFuture<$0.RecognizeResult> s_RecognizeVoiceCommand(
+      $async.Stream<$0.S_RecognizeVoiceControl> request,
+      {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$s_RecognizeVoiceCommand, request,
+            options: options)
+        .single;
+  }
+
   $grpc.ResponseFuture<$0.RecognizeResult> recognizeVoiceCommand(
-      $async.Stream<$0.RecognizeControl> request,
+      $async.Stream<$0.RecognizeVoiceControl> request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$recognizeVoiceCommand, request,
             options: options)
         .single;
   }
 
-  $grpc.ResponseFuture<$0.ExecuteResult> executeVoiceCommand(
-      $0.ExecuteInput request,
+  $grpc.ResponseFuture<$0.RecognizeResult> recognizeTextCommand(
+      $0.RecognizeTextControl request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$executeVoiceCommand, request, options: options);
+    return $createUnaryCall(_$recognizeTextCommand, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ExecuteResult> executeCommand($0.ExecuteInput request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$executeCommand, request, options: options);
   }
 }
 
@@ -87,6 +123,13 @@ abstract class VoiceAgentServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.ServiceStatus value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.VoiceAudio, $0.WakeWordStatus>(
+        'S_DetectWakeWord',
+        s_DetectWakeWord,
+        true,
+        true,
+        ($core.List<$core.int> value) => $0.VoiceAudio.fromBuffer(value),
+        ($0.WakeWordStatus value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.WakeWordStatus>(
         'DetectWakeWord',
         detectWakeWord_Pre,
@@ -94,16 +137,35 @@ abstract class VoiceAgentServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.WakeWordStatus value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.RecognizeControl, $0.RecognizeResult>(
-        'RecognizeVoiceCommand',
-        recognizeVoiceCommand,
-        true,
+    $addMethod(
+        $grpc.ServiceMethod<$0.S_RecognizeVoiceControl, $0.RecognizeResult>(
+            'S_RecognizeVoiceCommand',
+            s_RecognizeVoiceCommand,
+            true,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.S_RecognizeVoiceControl.fromBuffer(value),
+            ($0.RecognizeResult value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.RecognizeVoiceControl, $0.RecognizeResult>(
+            'RecognizeVoiceCommand',
+            recognizeVoiceCommand,
+            true,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.RecognizeVoiceControl.fromBuffer(value),
+            ($0.RecognizeResult value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RecognizeTextControl, $0.RecognizeResult>(
+        'RecognizeTextCommand',
+        recognizeTextCommand_Pre,
         false,
-        ($core.List<$core.int> value) => $0.RecognizeControl.fromBuffer(value),
+        false,
+        ($core.List<$core.int> value) =>
+            $0.RecognizeTextControl.fromBuffer(value),
         ($0.RecognizeResult value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.ExecuteInput, $0.ExecuteResult>(
-        'ExecuteVoiceCommand',
-        executeVoiceCommand_Pre,
+        'ExecuteCommand',
+        executeCommand_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.ExecuteInput.fromBuffer(value),
@@ -120,17 +182,30 @@ abstract class VoiceAgentServiceBase extends $grpc.Service {
     yield* detectWakeWord(call, await request);
   }
 
-  $async.Future<$0.ExecuteResult> executeVoiceCommand_Pre(
+  $async.Future<$0.RecognizeResult> recognizeTextCommand_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.RecognizeTextControl> request) async {
+    return recognizeTextCommand(call, await request);
+  }
+
+  $async.Future<$0.ExecuteResult> executeCommand_Pre(
       $grpc.ServiceCall call, $async.Future<$0.ExecuteInput> request) async {
-    return executeVoiceCommand(call, await request);
+    return executeCommand(call, await request);
   }
 
   $async.Future<$0.ServiceStatus> checkServiceStatus(
       $grpc.ServiceCall call, $0.Empty request);
+  $async.Stream<$0.WakeWordStatus> s_DetectWakeWord(
+      $grpc.ServiceCall call, $async.Stream<$0.VoiceAudio> request);
   $async.Stream<$0.WakeWordStatus> detectWakeWord(
       $grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.RecognizeResult> s_RecognizeVoiceCommand(
+      $grpc.ServiceCall call,
+      $async.Stream<$0.S_RecognizeVoiceControl> request);
   $async.Future<$0.RecognizeResult> recognizeVoiceCommand(
-      $grpc.ServiceCall call, $async.Stream<$0.RecognizeControl> request);
-  $async.Future<$0.ExecuteResult> executeVoiceCommand(
+      $grpc.ServiceCall call, $async.Stream<$0.RecognizeVoiceControl> request);
+  $async.Future<$0.RecognizeResult> recognizeTextCommand(
+      $grpc.ServiceCall call, $0.RecognizeTextControl request);
+  $async.Future<$0.ExecuteResult> executeCommand(
       $grpc.ServiceCall call, $0.ExecuteInput request);
 }
