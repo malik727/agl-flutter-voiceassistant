@@ -73,8 +73,10 @@ enum NLUEngine { snips, rasa }
 
 class NLUEngineChoice extends StatefulWidget {
   final Function(NLUEngine) onEngineChanged;
+  final String theme;
 
-  const NLUEngineChoice({Key? key, required this.onEngineChanged})
+  const NLUEngineChoice(
+      {Key? key, required this.onEngineChanged, required this.theme})
       : super(key: key);
 
   @override
@@ -83,11 +85,13 @@ class NLUEngineChoice extends StatefulWidget {
 
 class _NLUEngineChoiceState extends State<NLUEngineChoice> {
   late NLUEngine _selectedEngine;
+  late String _theme;
 
   @override
   void initState() {
     super.initState();
     _selectedEngine = NLUEngine.snips; // Initialize the selection
+    _theme = widget.theme;
   }
 
   @override
@@ -110,7 +114,9 @@ class _NLUEngineChoiceState extends State<NLUEngineChoice> {
               ),
               color: _selectedEngine == NLUEngine.snips
                   ? Colors.green
-                  : Colors.white,
+                  : _theme == "dark" || _theme == "textured-dark"
+                      ? Colors.black
+                      : Colors.white,
               border: Border.all(
                 color: Colors.transparent,
               ),
@@ -155,7 +161,9 @@ class _NLUEngineChoiceState extends State<NLUEngineChoice> {
               ),
               color: _selectedEngine == NLUEngine.rasa
                   ? Colors.green
-                  : Colors.white,
+                  : _theme == "dark" || _theme == "textured-dark"
+                      ? Colors.black
+                      : Colors.white,
               border: Border.all(
                 color: Colors.transparent,
               ),

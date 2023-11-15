@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 class AppConfig {
   late String grpcHost;
   late int grpcPort;
+  late String theme;
 
-  AppConfig({required this.grpcHost, required this.grpcPort});
+  AppConfig(
+      {required this.grpcHost, required this.grpcPort, required this.theme});
 
   factory AppConfig.fromAsset() {
     return AppConfig._();
@@ -21,6 +23,7 @@ class AppConfig {
     return AppConfig(
       grpcHost: jsonMap['grpc_host'],
       grpcPort: jsonMap['grpc_port'],
+      theme: jsonMap['theme'],
     );
   }
 }

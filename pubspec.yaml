@@ -13,6 +13,7 @@ dependencies:
   provider: ^6.0.0
   grpc: ^3.1.0
   protobuf: ^2.1.0
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -23,5 +24,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/agl_logo.png
     - assets/config.json
+    - assets/agl_logo_lightmode.png
+    - assets/agl_logo_darkmode.png
+    - assets/background_texture.svg

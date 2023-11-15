@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_voiceassistant/widgets/try_commands.dart';
 import 'package:provider/provider.dart';
@@ -46,17 +48,29 @@ class HomePageState extends State<HomePage> {
     appState.isCommandProcessing = false;
 
     if (newMode == AssistantMode.wakeWord) {
-      appState.isWakeWordMode = true;
       addChatMessage(
           'Switched to Wake Word mode. I\'ll listen for the wake word "$_wakeWord" before responding.');
-      toggleWakeWordDetection(context, true);
+
+      // Close old ongoing wake word detection loop if any
+      if (appState.isWakeWordMode) {
+        appState.isWakeWordMode = false;
+        toggleWakeWordDetection(context, false);
+      }
+      // Start a new wake word detection loop
+      if (!appState.isWakeWordMode) {
+        appState.isWakeWordMode = true;
+        toggleWakeWordDetection(context, true);
+      }
     } else if (newMode == AssistantMode.manual) {
-      appState.isWakeWordMode = false;
       addChatMessage(
           'Switched to Manual mode. You can send commands directly by pressing record button.');
-      toggleWakeWordDetection(context, false);
+
+      // Close old ongoing wake word detection loop if any
+      if (appState.isWakeWordMode) {
+        appState.isWakeWordMode = false;
+        toggleWakeWordDetection(context, false);
+      }
     }
-    print(appState.isWakeWordMode);
     setState(() {}); // Trigger a rebuild
   }
 
@@ -334,6 +348,7 @@ class HomePageState extends State<HomePage> {
     final appState = context.watch<AppState>();
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Center(
           child: SizedBox(
@@ -342,13 +357,21 @@ class HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Image.asset(
-                  'assets/agl_logo.png', // Replace with your logo image path
-                  width: 120, // Adjust the width as needed
-                  height: 120, // Adjust the height as needed
+                Container(
+                  margin: EdgeInsets.only(
+                      top: 25,
+                      bottom: 25), // Adjust the top and bottom margin as needed
+                  child: Image.asset(
+                    _config.theme == "dark" || _config.theme == "textured-dark"
+                        ? 'assets/agl_logo_darkmode.png'
+                        : 'assets/agl_logo_lightmode.png',
+                    width: 300,
+                    fit: BoxFit
+                        .contain, // Ensure the image fits within the specified dimensions
+                  ),
                 ),
                 Text(
-                  "AGL Voice Assistant",
+                  "Voice Assistant",
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 15),
@@ -357,37 +380,52 @@ class HomePageState extends State<HomePage> {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: Card(
-                        elevation: 4, // Add elevation for shadow
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Assistant Mode',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 16), // Add spacing if needed
-                              Center(
-                                child: Consumer<AppState>(
-                                  builder: (context, appState, _) {
-                                    return AssistantModeChoice(
-                                      onModeChanged: (newMode) {
-                                        changeAssistantMode(context, newMode);
-                                        print(newMode);
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                          child: Card(
+                            color: _config.theme == "textured-dark" ||
+                                    _config.theme == "textured-light"
+                                ? Colors.transparent
+                                : null,
+                            elevation: 4, // Add elevation for shadow
+                            shadowColor: _config.theme == "textured-dark" ||
+                                    _config.theme == "textured-light"
+                                ? Colors.transparent
+                                : null,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Assistant Mode',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 16), // Add spacing if needed
+                                  Center(
+                                    child: Consumer<AppState>(
+                                      builder: (context, appState, _) {
+                                        return AssistantModeChoice(
+                                          onModeChanged: (newMode) {
+                                            changeAssistantMode(
+                                                context, newMode);
+                                            print(newMode);
+                                          },
+                                          theme: _config.theme,
+                                        );
                                       },
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -397,37 +435,52 @@ class HomePageState extends State<HomePage> {
 
                     Flexible(
                       flex: 1,
-                      child: Card(
-                        elevation: 4, // Add elevation for shadow
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Intent Engine',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 16), // Add spacing if needed
-                              Center(
-                                child: Consumer<AppState>(
-                                  builder: (context, appState, _) {
-                                    return NLUEngineChoice(
-                                      onEngineChanged: (newEngine) {
-                                        changeIntentEngine(context, newEngine);
-                                        print(newEngine);
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                          child: Card(
+                            color: _config.theme == "textured-dark" ||
+                                    _config.theme == "textured-light"
+                                ? Colors.transparent
+                                : null,
+                            elevation: 4, // Add elevation for shadow
+                            shadowColor: _config.theme == "textured-dark" ||
+                                    _config.theme == "textured-light"
+                                ? Colors.transparent
+                                : null,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Intent Engine',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 16), // Add spacing if needed
+                                  Center(
+                                    child: Consumer<AppState>(
+                                      builder: (context, appState, _) {
+                                        return NLUEngineChoice(
+                                          onEngineChanged: (newEngine) {
+                                            changeIntentEngine(
+                                                context, newEngine);
+                                            print(newEngine);
+                                          },
+                                          theme: _config.theme,
+                                        );
                                       },
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -439,10 +492,12 @@ class HomePageState extends State<HomePage> {
                   scrollController: _scrollController,
                   chatMessages: chatMessages,
                   addChatMessage: addChatMessage,
+                  theme: _config.theme,
                 ),
                 SizedBox(height: 10),
                 if (!appState.isWakeWordMode || appState.isWakeWordDetected)
-                  TryCommandsSection(onCommandTap: handleCommandTap),
+                  TryCommandsSection(
+                      onCommandTap: handleCommandTap, theme: _config.theme),
                 SizedBox(height: 30),
                 if (!appState.isWakeWordMode || appState.isWakeWordDetected)
                   if (!appState.isCommandProcessing)

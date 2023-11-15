@@ -1,56 +1,71 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class ChatSection extends StatelessWidget {
   final ScrollController scrollController;
   final List<ChatMessage> chatMessages;
   final Function(String text, {bool isUserMessage}) addChatMessage;
+  final String theme;
 
   ChatSection({
     required this.scrollController,
     required this.chatMessages,
     required this.addChatMessage,
+    required this.theme,
   });
 
   @override
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4, // Add a subtle shadow
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Chat heading
-          Container(
-            padding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-            // alignment: Alignment.l,
-            child: Text(
-              'Conversation Logs',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Card(
+          color: theme == "textured-dark" || theme == "textured-light"
+              ? Colors.transparent
+              : null,
+          elevation: 4, // Add a subtle shadow
+          shadowColor: theme == "textured-dark" || theme == "textured-light"
+              ? Colors.transparent
+              : null,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Chat heading
+              Container(
+                padding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                // alignment: Alignment.l,
+                child: Text(
+                  'Conversation Logs',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
               ),
-              textAlign: TextAlign.left,
-            ),
+              // Chat messages with fixed height
+              Container(
+                padding: EdgeInsets.all(10),
+                height: 180, // Adjust the height as needed
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: chatMessages.length,
+                  itemBuilder: (context, index) {
+                    final message = chatMessages[index];
+                    return ChatMessageTile(message: message);
+                  },
+                ),
+              ),
+              // User input field (if needed)
+              // ...
+            ],
           ),
-          // Chat messages with fixed height
-          Container(
-            padding: EdgeInsets.all(10),
-            height: 180, // Adjust the height as needed
-            child: ListView.builder(
-              controller: scrollController,
-              itemCount: chatMessages.length,
-              itemBuilder: (context, index) {
-                final message = chatMessages[index];
-                return ChatMessageTile(message: message);
-              },
-            ),
-          ),
-          // User input field (if needed)
-          // ...
-        ],
+        ),
       ),
     );
   }
@@ -82,7 +97,7 @@ class ChatMessageTile extends StatelessWidget {
           children: [
             if (!message.isUserMessage)
               CircleAvatar(
-                backgroundColor: Colors.green[400],
+                backgroundColor: Colors.green,
                 child: Icon(
                   Icons.smart_toy_outlined,
                   color: Colors.white,
@@ -103,8 +118,7 @@ class ChatMessageTile extends StatelessWidget {
                         ? Radius.circular(0)
                         : Radius.circular(16),
                   ),
-                  color:
-                      message.isUserMessage ? Colors.blue : Colors.green[400],
+                  color: message.isUserMessage ? Colors.blue : Colors.green,
                 ),
                 child: Text(
                   message.text,

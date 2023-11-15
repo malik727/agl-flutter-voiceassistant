@@ -1,4 +1,5 @@
 {
     "grpc_host": "127.0.0.1",
-    "grpc_port": 51053
+    "grpc_port": 51053,
+    "theme": "textured-dark"
 }

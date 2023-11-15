@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'models/app_state.dart';
 import 'screens/home_screen.dart';
 import 'screens/error_screen.dart';
@@ -62,19 +63,53 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AGL Voice Assistant',
+      title: 'Voice Assistant',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: config.theme == "dark" || config.theme == "textured-dark"
+            ? ColorScheme.dark(
+                primary: Colors.green,
+                onPrimary: Colors.black, // Text color on the primary background
+                secondary: Colors.greenAccent,
+                onSecondary:
+                    Colors.black, // Text color on the secondary background
+              )
+            : ColorScheme.light(
+                primary: Colors.green,
+                onPrimary: Colors.white, // Text color on the primary background
+                secondary: Colors.greenAccent,
+                onSecondary:
+                    Colors.white, // Text color on the secondary background
+              ),
       ),
-      home: Consumer<ServiceStatusProvider>(
-        builder: (context, provider, child) {
-          return provider.isServiceOnline
-              ? HomePage(config: config, wakeWord: provider.wakeWord)
-              : ErrorScreen(
-                  onRetry: onRetry, // Pass the callback to the ErrorScreen
-                ); // Conditionally render HomePage or ErrorScreen
-        },
+      home: Stack(
+        children: [
+          Container(
+            color: config.theme == "dark" || config.theme == "textured-dark"
+                ? Colors.black
+                : Colors
+                    .white, // Set the background color based on dark or light mode
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          if (config.theme == 'textured-dark' ||
+              config.theme == 'textured-light')
+            SvgPicture.asset(
+              'assets/background_texture.svg',
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.contain,
+            ),
+          Consumer<ServiceStatusProvider>(
+            builder: (context, provider, child) {
+              return provider.isServiceOnline
+                  ? HomePage(config: config, wakeWord: provider.wakeWord)
+                  : ErrorScreen(
+                      onRetry: onRetry,
+                    );
+            },
+          ),
+        ],
       ),
     );
   }

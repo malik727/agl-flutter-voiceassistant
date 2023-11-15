@@ -1,64 +1,75 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class TryCommandsSection extends StatelessWidget {
   final Future<void> Function(String) onCommandTap; // Define a callback
+  final String theme;
 
-  TryCommandsSection({required this.onCommandTap});
+  TryCommandsSection({required this.onCommandTap, required this.theme});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: double.infinity,
-        child: Card(
-          // padding: EdgeInsets.all(16),
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(12),
-          // ),
-          elevation: 4, // Add a subtle shadow
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-                child: Text(
-                  "Try Commands",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+      width: double.infinity,
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: Card(
+            color: theme == "textured-dark" || theme == "textured-light"
+                ? Colors.transparent
+                : null,
+            elevation: 4, // Add a subtle shadow
+            shadowColor: theme == "textured-dark" || theme == "textured-light"
+                ? Colors.transparent
+                : null,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                  child: Text(
+                    "Try Commands",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-                child: Text(
-                  "(Tap on any of the following commands to try them out)",
-                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-                  textAlign: TextAlign.left,
+                Container(
+                  padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                  child: Text(
+                    "(Tap on any of the following commands to try them out)",
+                    style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-              ),
-              SizedBox(height: 6),
-              Container(
-                padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
-                child: Wrap(
-                  spacing: 10,
-                  children: [
-                    buildCommandButton("Set the volume to fifty percent"),
-                    buildCommandButton("Set the fan speed to max"),
-                    buildCommandButton(
-                        "Increase the temperature by three degrees"),
-                    buildCommandButton(
-                        "Decrease the fan speed by five percent"),
-                    buildCommandButton("Can you reduce the volume"),
-                  ],
+                SizedBox(height: 6),
+                Container(
+                  padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
+                  child: Wrap(
+                    spacing: 10,
+                    children: [
+                      buildCommandButton("Set the volume to fifty percent"),
+                      buildCommandButton("Set the fan speed to max"),
+                      buildCommandButton(
+                          "Increase the temperature by three degrees"),
+                      buildCommandButton(
+                          "Decrease the fan speed by five percent"),
+                      buildCommandButton("Can you reduce the volume"),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget buildCommandButton(String commandText) {

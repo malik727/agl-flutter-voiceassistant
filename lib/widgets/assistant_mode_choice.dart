@@ -75,8 +75,10 @@ enum AssistantMode { wakeWord, manual }
 
 class AssistantModeChoice extends StatefulWidget {
   final Function(AssistantMode) onModeChanged;
+  final String theme;
 
-  const AssistantModeChoice({Key? key, required this.onModeChanged})
+  const AssistantModeChoice(
+      {Key? key, required this.onModeChanged, required this.theme})
       : super(key: key);
 
   @override
@@ -85,11 +87,14 @@ class AssistantModeChoice extends StatefulWidget {
 
 class AssistantModeChoiceState extends State<AssistantModeChoice> {
   late AssistantMode _selectedMode;
+  late String _theme;
 
   @override
   void initState() {
     super.initState();
     _selectedMode = AssistantMode.manual; // Initialize the selection
+    _theme = widget.theme;
+    print(widget.theme);
   }
 
   @override
@@ -112,7 +117,9 @@ class AssistantModeChoiceState extends State<AssistantModeChoice> {
               ),
               color: _selectedMode == AssistantMode.wakeWord
                   ? Colors.green
-                  : Colors.white,
+                  : _theme == "dark" || _theme == "textured-dark"
+                      ? Colors.black
+                      : Colors.white,
               border: Border.all(
                 color: Colors.transparent,
               ),
@@ -157,7 +164,9 @@ class AssistantModeChoiceState extends State<AssistantModeChoice> {
               ),
               color: _selectedMode == AssistantMode.manual
                   ? Colors.green
-                  : Colors.white,
+                  : _theme == "dark" || _theme == "textured-dark"
+                      ? Colors.black
+                      : Colors.white,
               border: Border.all(
                 color: Colors.transparent,
               ),
