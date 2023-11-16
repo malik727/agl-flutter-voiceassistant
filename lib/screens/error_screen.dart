@@ -34,7 +34,7 @@ class ErrorScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.grey[700],
+                  color: Colors.grey[600],
                 ),
               ),
               SizedBox(height: 20),

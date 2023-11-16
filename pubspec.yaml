@@ -13,7 +13,7 @@ dependencies:
   provider: ^6.0.0
   grpc: ^3.1.0
   protobuf: ^2.1.0
-  flutter_svg: ^2.0.9
+  flutter_svg: ^1.1.6
 
 dev_dependencies:
   flutter_test:
